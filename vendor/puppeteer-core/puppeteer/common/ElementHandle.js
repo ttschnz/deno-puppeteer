@@ -1,5 +1,6 @@
 /// <reference types="./ElementHandle.d.ts" />
-var __classPrivateFieldSet = (this && this.__classPrivateFieldSet) ||
+var __classPrivateFieldSet =
+  (this && this.__classPrivateFieldSet) ||
   function (receiver, state, value, kind, f) {
     if (kind === "m") throw new TypeError("Private method is not writable");
     if (kind === "a" && !f) {
@@ -11,17 +12,20 @@ var __classPrivateFieldSet = (this && this.__classPrivateFieldSet) ||
         : !state.has(receiver)
     ) {
       throw new TypeError(
-        "Cannot write private member to an object whose class did not declare it",
+        "Cannot write private member to an object whose class did not declare it"
       );
     }
-    return (kind === "a"
-      ? f.call(receiver, value)
-      : f
-      ? f.value = value
-      : state.set(receiver, value)),
-      value;
+    return (
+      kind === "a"
+        ? f.call(receiver, value)
+        : f
+        ? (f.value = value)
+        : state.set(receiver, value),
+      value
+    );
   };
-var __classPrivateFieldGet = (this && this.__classPrivateFieldGet) ||
+var __classPrivateFieldGet =
+  (this && this.__classPrivateFieldGet) ||
   function (receiver, state, kind, f) {
     if (kind === "a" && !f) {
       throw new TypeError("Private accessor was defined without a getter");
@@ -32,7 +36,7 @@ var __classPrivateFieldGet = (this && this.__classPrivateFieldGet) ||
         : !state.has(receiver)
     ) {
       throw new TypeError(
-        "Cannot read private member from an object whose class did not declare it",
+        "Cannot read private member from an object whose class did not declare it"
       );
     }
     return kind === "m"
@@ -111,7 +115,7 @@ export class ElementHandle extends JSHandle {
       this,
       _ElementHandle_frameManager,
       frameManager,
-      "f",
+      "f"
     );
   }
   /**
@@ -122,14 +126,13 @@ export class ElementHandle extends JSHandle {
    * matching the given selector. Otherwise, `null`.
    */
   async $(selector) {
-    const { updatedSelector, queryHandler } = getQueryHandlerAndSelector(
-      selector,
-    );
+    const { updatedSelector, queryHandler } =
+      getQueryHandlerAndSelector(selector);
     assert(
       queryHandler.queryOne,
-      "Cannot handle queries for a single element with the given selector",
+      "Cannot handle queries for a single element with the given selector"
     );
-    return (await queryHandler.queryOne(this, updatedSelector));
+    return await queryHandler.queryOne(this, updatedSelector);
   }
   /**
    * Queries the current element for all elements matching the given selector.
@@ -139,14 +142,13 @@ export class ElementHandle extends JSHandle {
    * elements matching the given selector.
    */
   async $$(selector) {
-    const { updatedSelector, queryHandler } = getQueryHandlerAndSelector(
-      selector,
-    );
+    const { updatedSelector, queryHandler } =
+      getQueryHandlerAndSelector(selector);
     assert(
       queryHandler.queryAll,
-      "Cannot handle queries for a multiple element with the given selector",
+      "Cannot handle queries for a multiple element with the given selector"
     );
-    return (await queryHandler.queryAll(this, updatedSelector));
+    return await queryHandler.queryAll(this, updatedSelector);
   }
   /**
    * Runs the given function on the first element matching the given selector in
@@ -178,7 +180,7 @@ export class ElementHandle extends JSHandle {
     const elementHandle = await this.$(selector);
     if (!elementHandle) {
       throw new Error(
-        `Error: failed to find element matching selector "${selector}"`,
+        `Error: failed to find element matching selector "${selector}"`
       );
     }
     const result = await elementHandle.evaluate(pageFunction, ...args);
@@ -219,12 +221,10 @@ export class ElementHandle extends JSHandle {
    * @returns A promise to the result of the function.
    */
   async $$eval(selector, pageFunction, ...args) {
-    const { updatedSelector, queryHandler } = getQueryHandlerAndSelector(
-      selector,
-    );
+    const { updatedSelector, queryHandler } =
+      getQueryHandlerAndSelector(selector);
     assert(queryHandler.queryAllArray);
-    const arrayHandle =
-      (await queryHandler.queryAllArray(this, updatedSelector));
+    const arrayHandle = await queryHandler.queryAllArray(this, updatedSelector);
     const result = await arrayHandle.evaluate(pageFunction, ...args);
     await arrayHandle.dispose();
     return result;
@@ -288,13 +288,13 @@ export class ElementHandle extends JSHandle {
       {
         ...options,
         root: adoptedRoot,
-      },
+      }
     );
     await adoptedRoot.dispose();
     if (!handle) {
       return null;
     }
-    const result = (await frame.worlds[MAIN_WORLD].adoptHandle(handle));
+    const result = await frame.worlds[MAIN_WORLD].adoptHandle(handle);
     await handle.dispose();
     return result;
   }
@@ -376,7 +376,7 @@ export class ElementHandle extends JSHandle {
       return null;
     }
     return __classPrivateFieldGet(this, _ElementHandle_frameManager, "f").frame(
-      nodeInfo.node.frameId,
+      nodeInfo.node.frameId
     );
   }
   /**
@@ -389,22 +389,22 @@ export class ElementHandle extends JSHandle {
           objectId: this.remoteObject().objectId,
         })
         .catch(debugError),
-      __classPrivateFieldGet(this, _ElementHandle_page, "f")._client().send(
-        "Page.getLayoutMetrics",
-      ),
+      __classPrivateFieldGet(this, _ElementHandle_page, "f")
+        ._client()
+        .send("Page.getLayoutMetrics"),
     ]);
     if (!result || !result.quads.length) {
       throw new Error("Node is either not clickable or not an HTMLElement");
     }
     // Filter out quads that have too small area to click into.
     // Fallback to `layoutViewport` in case of using Firefox.
-    const { clientWidth, clientHeight } = layoutMetrics.cssLayoutViewport ||
-      layoutMetrics.layoutViewport;
+    const { clientWidth, clientHeight } =
+      layoutMetrics.cssLayoutViewport || layoutMetrics.layoutViewport;
     const { offsetX, offsetY } = await __classPrivateFieldGet(
       this,
       _ElementHandle_instances,
       "m",
-      _ElementHandle_getOOPIFOffsets,
+      _ElementHandle_getOOPIFOffsets
     ).call(this, __classPrivateFieldGet(this, _ElementHandle_frame, "f"));
     const quads = result.quads
       .map((quad) => {
@@ -412,7 +412,7 @@ export class ElementHandle extends JSHandle {
           this,
           _ElementHandle_instances,
           "m",
-          _ElementHandle_fromProtocolQuad,
+          _ElementHandle_fromProtocolQuad
         ).call(this, quad);
       })
       .map((quad) => {
@@ -423,7 +423,7 @@ export class ElementHandle extends JSHandle {
           this,
           _ElementHandle_instances,
           "m",
-          _ElementHandle_intersectQuadWithViewport,
+          _ElementHandle_intersectQuadWithViewport
         ).call(this, quad, clientWidth, clientHeight);
       })
       .filter((quad) => {
@@ -477,12 +477,12 @@ export class ElementHandle extends JSHandle {
       this,
       _ElementHandle_instances,
       "m",
-      _ElementHandle_scrollIntoViewIfNeeded,
+      _ElementHandle_scrollIntoViewIfNeeded
     ).call(this);
     const { x, y } = await this.clickablePoint();
     await __classPrivateFieldGet(this, _ElementHandle_page, "f").mouse.move(
       x,
-      y,
+      y
     );
   }
   /**
@@ -495,13 +495,13 @@ export class ElementHandle extends JSHandle {
       this,
       _ElementHandle_instances,
       "m",
-      _ElementHandle_scrollIntoViewIfNeeded,
+      _ElementHandle_scrollIntoViewIfNeeded
     ).call(this);
     const { x, y } = await this.clickablePoint(options.offset);
     await __classPrivateFieldGet(this, _ElementHandle_page, "f").mouse.click(
       x,
       y,
-      options,
+      options
     );
   }
   /**
@@ -509,19 +509,25 @@ export class ElementHandle extends JSHandle {
    */
   async drag(target) {
     assert(
-      __classPrivateFieldGet(this, _ElementHandle_page, "f")
-        .isDragInterceptionEnabled(),
-      "Drag Interception is not enabled!",
+      __classPrivateFieldGet(
+        this,
+        _ElementHandle_page,
+        "f"
+      ).isDragInterceptionEnabled(),
+      "Drag Interception is not enabled!"
     );
     await __classPrivateFieldGet(
       this,
       _ElementHandle_instances,
       "m",
-      _ElementHandle_scrollIntoViewIfNeeded,
+      _ElementHandle_scrollIntoViewIfNeeded
     ).call(this);
     const start = await this.clickablePoint();
-    return await __classPrivateFieldGet(this, _ElementHandle_page, "f").mouse
-      .drag(start, target);
+    return await __classPrivateFieldGet(
+      this,
+      _ElementHandle_page,
+      "f"
+    ).mouse.drag(start, target);
   }
   /**
    * This method creates a `dragenter` event on the element.
@@ -531,11 +537,14 @@ export class ElementHandle extends JSHandle {
       this,
       _ElementHandle_instances,
       "m",
-      _ElementHandle_scrollIntoViewIfNeeded,
+      _ElementHandle_scrollIntoViewIfNeeded
     ).call(this);
     const target = await this.clickablePoint();
-    await __classPrivateFieldGet(this, _ElementHandle_page, "f").mouse
-      .dragEnter(target, data);
+    await __classPrivateFieldGet(
+      this,
+      _ElementHandle_page,
+      "f"
+    ).mouse.dragEnter(target, data);
   }
   /**
    * This method creates a `dragover` event on the element.
@@ -545,12 +554,12 @@ export class ElementHandle extends JSHandle {
       this,
       _ElementHandle_instances,
       "m",
-      _ElementHandle_scrollIntoViewIfNeeded,
+      _ElementHandle_scrollIntoViewIfNeeded
     ).call(this);
     const target = await this.clickablePoint();
     await __classPrivateFieldGet(this, _ElementHandle_page, "f").mouse.dragOver(
       target,
-      data,
+      data
     );
   }
   /**
@@ -561,12 +570,12 @@ export class ElementHandle extends JSHandle {
       this,
       _ElementHandle_instances,
       "m",
-      _ElementHandle_scrollIntoViewIfNeeded,
+      _ElementHandle_scrollIntoViewIfNeeded
     ).call(this);
     const destination = await this.clickablePoint();
     await __classPrivateFieldGet(this, _ElementHandle_page, "f").mouse.drop(
       destination,
-      data,
+      data
     );
   }
   /**
@@ -577,12 +586,15 @@ export class ElementHandle extends JSHandle {
       this,
       _ElementHandle_instances,
       "m",
-      _ElementHandle_scrollIntoViewIfNeeded,
+      _ElementHandle_scrollIntoViewIfNeeded
     ).call(this);
     const startPoint = await this.clickablePoint();
     const targetPoint = await target.clickablePoint();
-    await __classPrivateFieldGet(this, _ElementHandle_page, "f").mouse
-      .dragAndDrop(startPoint, targetPoint, options);
+    await __classPrivateFieldGet(
+      this,
+      _ElementHandle_page,
+      "f"
+    ).mouse.dragAndDrop(startPoint, targetPoint, options);
   }
   /**
    * Triggers a `change` and `input` event once all the provided options have been
@@ -608,7 +620,7 @@ export class ElementHandle extends JSHandle {
           value +
           '" of type "' +
           typeof value +
-          '"',
+          '"'
       );
     }
     return this.evaluate((element, vals) => {
@@ -657,26 +669,10 @@ export class ElementHandle extends JSHandle {
     });
     assert(
       filePaths.length <= 1 || isMultiple,
-      "Multiple file uploads only work with <input type=file multiple>",
+      "Multiple file uploads only work with <input type=file multiple>"
     );
-    // Locate all files and confirm that they exist.
-    let path;
-    try {
-      path = await import("path");
-    } catch (error) {
-      if (error instanceof TypeError) {
-        throw new Error(
-          `JSHandle#uploadFile can only be used in Node-like environments.`,
-        );
-      }
-      throw error;
-    }
     const files = filePaths.map((filePath) => {
-      if (path.win32.isAbsolute(filePath) || path.posix.isAbsolute(filePath)) {
-        return filePath;
-      } else {
-        return path.resolve(filePath);
-      }
+      return Deno.realPathSync(filePath);
     });
     const { objectId } = this.remoteObject();
     const { node } = await this.client.send("DOM.describeNode", { objectId });
@@ -710,11 +706,14 @@ export class ElementHandle extends JSHandle {
       this,
       _ElementHandle_instances,
       "m",
-      _ElementHandle_scrollIntoViewIfNeeded,
+      _ElementHandle_scrollIntoViewIfNeeded
     ).call(this);
     const { x, y } = await this.clickablePoint();
-    await __classPrivateFieldGet(this, _ElementHandle_page, "f").touchscreen
-      .tap(x, y);
+    await __classPrivateFieldGet(
+      this,
+      _ElementHandle_page,
+      "f"
+    ).touchscreen.tap(x, y);
   }
   /**
    * Calls {@link https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/focus | focus} on the element.
@@ -754,7 +753,7 @@ export class ElementHandle extends JSHandle {
     await this.focus();
     await __classPrivateFieldGet(this, _ElementHandle_page, "f").keyboard.type(
       text,
-      options,
+      options
     );
   }
   /**
@@ -775,7 +774,7 @@ export class ElementHandle extends JSHandle {
     await this.focus();
     await __classPrivateFieldGet(this, _ElementHandle_page, "f").keyboard.press(
       key,
-      options,
+      options
     );
   }
   /**
@@ -787,7 +786,7 @@ export class ElementHandle extends JSHandle {
       this,
       _ElementHandle_instances,
       "m",
-      _ElementHandle_getBoxModel,
+      _ElementHandle_getBoxModel
     ).call(this);
     if (!result) {
       return null;
@@ -796,7 +795,7 @@ export class ElementHandle extends JSHandle {
       this,
       _ElementHandle_instances,
       "m",
-      _ElementHandle_getOOPIFOffsets,
+      _ElementHandle_getOOPIFOffsets
     ).call(this, __classPrivateFieldGet(this, _ElementHandle_frame, "f"));
     const quad = result.model.border;
     const x = Math.min(quad[0], quad[2], quad[4], quad[6]);
@@ -818,7 +817,7 @@ export class ElementHandle extends JSHandle {
       this,
       _ElementHandle_instances,
       "m",
-      _ElementHandle_getBoxModel,
+      _ElementHandle_getBoxModel
     ).call(this);
     if (!result) {
       return null;
@@ -827,7 +826,7 @@ export class ElementHandle extends JSHandle {
       this,
       _ElementHandle_instances,
       "m",
-      _ElementHandle_getOOPIFOffsets,
+      _ElementHandle_getOOPIFOffsets
     ).call(this, __classPrivateFieldGet(this, _ElementHandle_frame, "f"));
     const { content, padding, border, margin, width, height } = result.model;
     return {
@@ -836,40 +835,40 @@ export class ElementHandle extends JSHandle {
           this,
           _ElementHandle_instances,
           "m",
-          _ElementHandle_fromProtocolQuad,
+          _ElementHandle_fromProtocolQuad
         ).call(this, content),
         offsetX,
-        offsetY,
+        offsetY
       ),
       padding: applyOffsetsToQuad(
         __classPrivateFieldGet(
           this,
           _ElementHandle_instances,
           "m",
-          _ElementHandle_fromProtocolQuad,
+          _ElementHandle_fromProtocolQuad
         ).call(this, padding),
         offsetX,
-        offsetY,
+        offsetY
       ),
       border: applyOffsetsToQuad(
         __classPrivateFieldGet(
           this,
           _ElementHandle_instances,
           "m",
-          _ElementHandle_fromProtocolQuad,
+          _ElementHandle_fromProtocolQuad
         ).call(this, border),
         offsetX,
-        offsetY,
+        offsetY
       ),
       margin: applyOffsetsToQuad(
         __classPrivateFieldGet(
           this,
           _ElementHandle_instances,
           "m",
-          _ElementHandle_fromProtocolQuad,
+          _ElementHandle_fromProtocolQuad
         ).call(this, margin),
         offsetX,
-        offsetY,
+        offsetY
       ),
       width,
       height,
@@ -884,8 +883,11 @@ export class ElementHandle extends JSHandle {
     let needsViewportReset = false;
     let boundingBox = await this.boundingBox();
     assert(boundingBox, "Node is either not visible or not an HTMLElement");
-    const viewport = __classPrivateFieldGet(this, _ElementHandle_page, "f")
-      .viewport();
+    const viewport = __classPrivateFieldGet(
+      this,
+      _ElementHandle_page,
+      "f"
+    ).viewport();
     if (
       viewport &&
       (boundingBox.width > viewport.width ||
@@ -896,7 +898,7 @@ export class ElementHandle extends JSHandle {
         height: Math.max(viewport.height, Math.ceil(boundingBox.height)),
       };
       await __classPrivateFieldGet(this, _ElementHandle_page, "f").setViewport(
-        Object.assign({}, viewport, newViewport),
+        Object.assign({}, viewport, newViewport)
       );
       needsViewportReset = true;
     }
@@ -904,7 +906,7 @@ export class ElementHandle extends JSHandle {
       this,
       _ElementHandle_instances,
       "m",
-      _ElementHandle_scrollIntoViewIfNeeded,
+      _ElementHandle_scrollIntoViewIfNeeded
     ).call(this);
     boundingBox = await this.boundingBox();
     assert(boundingBox, "Node is either not visible or not an HTMLElement");
@@ -912,21 +914,27 @@ export class ElementHandle extends JSHandle {
     assert(boundingBox.height !== 0, "Node has 0 height.");
     const layoutMetrics = await this.client.send("Page.getLayoutMetrics");
     // Fallback to `layoutViewport` in case of using Firefox.
-    const { pageX, pageY } = layoutMetrics.cssVisualViewport ||
-      layoutMetrics.layoutViewport;
+    const { pageX, pageY } =
+      layoutMetrics.cssVisualViewport || layoutMetrics.layoutViewport;
     const clip = Object.assign({}, boundingBox);
     clip.x += pageX;
     clip.y += pageY;
     const imageData = await __classPrivateFieldGet(
       this,
       _ElementHandle_page,
-      "f",
-    ).screenshot(Object.assign({}, {
-      clip,
-    }, options));
+      "f"
+    ).screenshot(
+      Object.assign(
+        {},
+        {
+          clip,
+        },
+        options
+      )
+    );
     if (needsViewportReset && viewport) {
       await __classPrivateFieldGet(this, _ElementHandle_page, "f").setViewport(
-        viewport,
+        viewport
       );
     }
     return imageData;
@@ -935,9 +943,8 @@ export class ElementHandle extends JSHandle {
    * Resolves to true if the element is visible in the current viewport.
    */
   async isIntersectingViewport(options) {
-    const { threshold = 0 } = options !== null && options !== void 0
-      ? options
-      : {};
+    const { threshold = 0 } =
+      options !== null && options !== void 0 ? options : {};
     return await this.evaluate(async (element, threshold) => {
       const visibleRatio = await new Promise((resolve) => {
         const observer = new IntersectionObserver((entries) => {
@@ -950,11 +957,11 @@ export class ElementHandle extends JSHandle {
     }, threshold);
   }
 }
-_ElementHandle_frame = new WeakMap(),
-  _ElementHandle_page = new WeakMap(),
-  _ElementHandle_frameManager = new WeakMap(),
-  _ElementHandle_instances = new WeakSet(),
-  _ElementHandle_scrollIntoViewIfNeeded =
+(_ElementHandle_frame = new WeakMap()),
+  (_ElementHandle_page = new WeakMap()),
+  (_ElementHandle_frameManager = new WeakMap()),
+  (_ElementHandle_instances = new WeakSet()),
+  (_ElementHandle_scrollIntoViewIfNeeded =
     async function _ElementHandle_scrollIntoViewIfNeeded() {
       const error = await this.evaluate(async (element) => {
         if (!element.isConnected) {
@@ -974,34 +981,30 @@ _ElementHandle_frame = new WeakMap(),
         });
       } catch (_err) {
         // Fallback to Element.scrollIntoView if DOM.scrollIntoViewIfNeeded is not supported
-        await this.evaluate(
-          async (element, pageJavascriptEnabled) => {
-            const visibleRatio = async () => {
-              return await new Promise((resolve) => {
-                const observer = new IntersectionObserver((entries) => {
-                  resolve(entries[0].intersectionRatio);
-                  observer.disconnect();
-                });
-                observer.observe(element);
+        await this.evaluate(async (element, pageJavascriptEnabled) => {
+          const visibleRatio = async () => {
+            return await new Promise((resolve) => {
+              const observer = new IntersectionObserver((entries) => {
+                resolve(entries[0].intersectionRatio);
+                observer.disconnect();
               });
-            };
-            if (!pageJavascriptEnabled || (await visibleRatio()) !== 1.0) {
-              element.scrollIntoView({
-                block: "center",
-                inline: "center",
-                // @ts-expect-error Chrome still supports behavior: instant but
-                // it's not in the spec so TS shouts We don't want to make this
-                // breaking change in Puppeteer yet so we'll ignore the line.
-                behavior: "instant",
-              });
-            }
-          },
-          __classPrivateFieldGet(this, _ElementHandle_page, "f")
-            .isJavaScriptEnabled(),
-        );
+              observer.observe(element);
+            });
+          };
+          if (!pageJavascriptEnabled || (await visibleRatio()) !== 1.0) {
+            element.scrollIntoView({
+              block: "center",
+              inline: "center",
+              // @ts-expect-error Chrome still supports behavior: instant but
+              // it's not in the spec so TS shouts We don't want to make this
+              // breaking change in Puppeteer yet so we'll ignore the line.
+              behavior: "instant",
+            });
+          }
+        }, __classPrivateFieldGet(this, _ElementHandle_page, "f").isJavaScriptEnabled());
       }
-    },
-  _ElementHandle_getOOPIFOffsets =
+    }),
+  (_ElementHandle_getOOPIFOffsets =
     async function _ElementHandle_getOOPIFOffsets(frame) {
       let offsetX = 0;
       let offsetY = 0;
@@ -1012,12 +1015,11 @@ _ElementHandle_frame = new WeakMap(),
           currentFrame = parent;
           continue;
         }
-        const { backendNodeId } = await parent._client().send(
-          "DOM.getFrameOwner",
-          {
+        const { backendNodeId } = await parent
+          ._client()
+          .send("DOM.getFrameOwner", {
             frameId: currentFrame._id,
-          },
-        );
+          });
         const result = await parent._client().send("DOM.getBoxModel", {
           backendNodeId: backendNodeId,
         });
@@ -1029,24 +1031,24 @@ _ElementHandle_frame = new WeakMap(),
           this,
           _ElementHandle_instances,
           "m",
-          _ElementHandle_fromProtocolQuad,
+          _ElementHandle_fromProtocolQuad
         ).call(this, contentBoxQuad)[0];
         offsetX += topLeftCorner.x;
         offsetY += topLeftCorner.y;
         currentFrame = parent;
       }
       return { offsetX, offsetY };
-    },
-  _ElementHandle_getBoxModel = function _ElementHandle_getBoxModel() {
+    }),
+  (_ElementHandle_getBoxModel = function _ElementHandle_getBoxModel() {
     const params = {
       objectId: this.remoteObject().objectId,
     };
     return this.client.send("DOM.getBoxModel", params).catch((error) => {
       return debugError(error);
     });
-  },
-  _ElementHandle_fromProtocolQuad = function _ElementHandle_fromProtocolQuad(
-    quad,
+  }),
+  (_ElementHandle_fromProtocolQuad = function _ElementHandle_fromProtocolQuad(
+    quad
   ) {
     return [
       { x: quad[0], y: quad[1] },
@@ -1054,8 +1056,8 @@ _ElementHandle_frame = new WeakMap(),
       { x: quad[4], y: quad[5] },
       { x: quad[6], y: quad[7] },
     ];
-  },
-  _ElementHandle_intersectQuadWithViewport =
+  }),
+  (_ElementHandle_intersectQuadWithViewport =
     function _ElementHandle_intersectQuadWithViewport(quad, width, height) {
       return quad.map((point) => {
         return {
@@ -1063,7 +1065,7 @@ _ElementHandle_frame = new WeakMap(),
           y: Math.min(Math.max(point.y, 0), height),
         };
       });
-    };
+    });
 function computeQuadArea(quad) {
   /* Compute sum of all directed areas of adjacent triangles
        https://en.wikipedia.org/wiki/Polygon#Simple_polygons
